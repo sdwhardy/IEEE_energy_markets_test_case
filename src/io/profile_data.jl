@@ -100,7 +100,7 @@ _dict_in=Dict(
 #   2 │ 2020-01-01T01:00:00  0.14855
 function reduce_RES_to_k_days(_dict,_s)
     #keep only k specified days, shift year to 2020 (base year for all simmulations)
-    ks=FileIO.load("C:\\Users\\shardy\\Documents\\julia\\times_series_input_large_files\\yearly_cluster_4UKBEDEDK.jld2")
+    ks=FileIO.load(_s["rt_ex"]*"../../input//yearly_cluster_4UKBEDEDK_IEEE.jld2")#"C:\\Users\\shardy\\Documents\\julia\\times_series_input_large_files\\yearly_cluster_4UKBEDEDK.jld2")
     tss2keep=[]
     #RES sources
     for country in keys(_dict["Offshore Wind"])

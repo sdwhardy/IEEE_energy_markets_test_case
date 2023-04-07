@@ -50,7 +50,7 @@ function variable_gen_power_real(pm::_PM.AbstractPowerModel; nw::Int=pm.cnw, bou
     end
     report && _IM.sol_component_value(pm, nw, :gen, :pg, _PM.ids(pm, nw, :gen), pg)
 end
-
+    
 #generator imaginary power + constraints
 function variable_gen_power_imaginary(pm::_PM.AbstractPowerModel; nw::Int=pm.cnw, bounded::Bool=true, report::Bool=true)
     qg = _PM.var(pm, nw)[:qg] = JuMP.@variable(pm.model,

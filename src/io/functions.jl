@@ -248,10 +248,10 @@ end
 ###################### HVAC/HVDC
 
 function filter_mfile_cables(rt_ex)
-    nodes = DataFrames.DataFrame(XLSX.readtable(rt_ex*"input.xlsx", "node_generation")...)
-	edges = DataFrames.DataFrame(XLSX.readtable(rt_ex*"input.xlsx", "connections_acdc")...)
+    nodes = DataFrames.DataFrame(XLSX.readtable(rt_ex*"input.xlsx", "node_generation"))
+	edges = DataFrames.DataFrame(XLSX.readtable(rt_ex*"input.xlsx", "connections_acdc"))
     edges_existing = DataFrames.DataFrame()
-    try edges_existing = DataFrames.DataFrame(XLSX.readtable(rt_ex*"input.xlsx", "existing_lines")...) catch; println("No onshore net transfer capacities specified.") end
+    try edges_existing = DataFrames.DataFrame(XLSX.readtable(rt_ex*"input.xlsx", "existing_lines")) catch; println("No onshore net transfer capacities specified.") end
     file = rt_ex*"topology.m"
 	data = PowerModels.parse_file(file)
     data,edges_existing=add_ntcs(data,edges_existing)

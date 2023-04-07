@@ -134,7 +134,7 @@ end
 ############### pre simulation 
 function map_Of_Connections_ACDCNTC(data, s)
     nodes = s["nodes"]
-    nodes_ntc = DataFrames.DataFrame(XLSX.readtable(s["rt_ex"]*"input.xlsx", "nodes_ntc")...)
+    nodes_ntc = DataFrames.DataFrame(XLSX.readtable(s["rt_ex"]*"input.xlsx", "nodes_ntc"))
     _map_of_connections_ACDCNTC=DataFrames.DataFrame("from"=>[],"to"=>[],"lat_fr"=>[],"long_fr"=>[],"lat_to"=>[],"long_to"=>[],"mva"=>[],"type"=>[])
     for (key,br) in data["branch"]
         df_fr_ac=nodes[only(findall(==(br["f_bus"]), nodes.node)), :]

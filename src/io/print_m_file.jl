@@ -1,9 +1,9 @@
 ########################### Create topology.m ########################
 #loads files and calls main function 
 function topology_df(rt_ex, relax, _ac)
-	ac_cable_df = DataFrames.DataFrame(XLSX.readtable(rt_ex*"input.xlsx", "CABLES_AC_SET_UP")...)
-	dc_cable_df = DataFrames.DataFrame(XLSX.readtable(rt_ex*"input.xlsx", "CABLES_DC_SET_UP")...)
-	rem_df = DataFrames.DataFrame(XLSX.readtable(rt_ex*"input.xlsx", "REMAINDER")...)
+	ac_cable_df = DataFrames.DataFrame(XLSX.readtable(rt_ex*"input.xlsx", "CABLES_AC_SET_UP"))
+	dc_cable_df = DataFrames.DataFrame(XLSX.readtable(rt_ex*"input.xlsx", "CABLES_DC_SET_UP"))
+	rem_df = DataFrames.DataFrame(XLSX.readtable(rt_ex*"input.xlsx", "REMAINDER"))
 	ppf_mainACDCStorage2mfile(rem_df,ac_cable_df,dc_cable_df,rt_ex, relax, _ac)
 end
 
