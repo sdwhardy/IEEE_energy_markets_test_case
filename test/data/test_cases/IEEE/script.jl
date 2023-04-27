@@ -9,7 +9,7 @@ s = Dict(
 "rt_ex"=>pwd()*"\\test\\data\\test_cases\\IEEE\\",#folder path
 "scenario_data_file"=>pwd()*"\\test\\data\\input\\scenario_data_for_UKFRBENLDEDKNO.jld2",#"C:\\Users\\shardy\\Documents\\julia\\times_series_input_large_files\\scenario_data_for_UKFRBENLDEDKNO.jld2",
 ################# temperal parameters #################
-"test"=>true,#if true smallest (2 hour) problem variation is built for testing
+"test"=>false,#if true smallest (2 hour) problem variation is built for testing
 "scenario_planning_horizon"=>30,
 "scenario_names"=>["NT","DE","GA"],#["NT","DE","GA"]
 "k"=>4,#number of representative days modelled (24 hours per day)//#best for maintaining mean/max is k=6 2014, 2015
@@ -41,86 +41,18 @@ s = Dict(
 s["home_market"]=[]
 mn_data, data, s = _CBD.data_setup(s);
 #_CBD.problemINPUT_map(data, s)#oucomment to print result
-@time result = _CBD.nodal_market_main(mn_data, data, s)#-3359431 -33899162 0.89%
+@time result = _CBD.nodal_market_main(mn_data, data, s)#0.04% gap remained for best solution found
 result["s"]["cost_summary"]=_CBD.print_solution_wcost_data(result["result_mip"], result["s"], result["data"])
 
 ######################### HMD market #########################
 s["home_market"]=[[4,11],[5,10],[6,12],[1,8,13],[3,9]]
 mn_data, data, s = _CBD.data_setup(s);
-@time result = _CBD.zonal_market_main(mn_data, data, s)#
+@time result = _CBD.zonal_market_main(mn_data, data, s)
 result["s"]["cost_summary"]=_CBD.print_solution_wcost_data(result["result_mip"], result["s"], result["data"])
 
 ######################### Zonal OBZ #########################
 s["home_market"]=[[9,10,11,12,13]]
 mn_data, data, s = _CBD.data_setup(s);
-@time result = _CBD.zonal_market_main(mn_data, data, s)#
+@time result = _CBD.zonal_market_main(mn_data, data, s)
 result["s"]["cost_summary"]=_CBD.print_solution_wcost_data(result["result_mip"], result["s"], result["data"])
 
-
-
-
-
-
-#=
-############################################################################################################################
-FileIO.save("C:\\Users\\shardy\\Documents\\julia\\times_series_input_large_files\\onshore_grid\\HMD_results_NORTH_SEA_4G.jld2",result)
-##################### Post processing ##########################                               
-results = FileIO.load("C:\\Users\\shardy\\Documents\\julia\\times_series_input_large_files\\UK_BE_DE_DK\\zonalOBZ_results_NORTH_SEA_0gap.jld2")
-s, result_mip, data, mn_data = _CBD.summarize_in_s(results);
-s, result_mip, data, mn_data = _CBD.summarize_zonal_in_s(results);
-
-_CBD.print_table_summary(s)
-
-_CBD.topology_map(s)
-
-_CBD.plot_cumulative_production_all_scenarios_allWF(s, mn_data)
-
-_CBD.plot_cumulative_income_tl_all_scenarios(s,data)
-
-_CBD.print_solution_wcost_data(result_mip, s, data)
-
-for (k,c) in s["income_summary"]["tso"]["totals"]["ac"];println("AC("*k*"):"*string(c));end
-
-for (k,c) in s["income_summary"]["tso"]["totals"]["dc"];println("DC("*k*"):"*string(c));end
-
-country="DE";scenario="1"
-con=s["gen_consume_summary"]["onshore_demand"][scenario][country]#[121:144,:]
-gen=s["gen_consume_summary"]["onshore_generation"][scenario][country]
-_CBD.plot_generation_profile(deepcopy(gen),deepcopy(con))
-
-s=_CBD.owpps_profit_obz(s, result_mip, mn_data)
-
-s=_CBD.transmission_lines_profits(s, result_mip, mn_data, data);
-
-s=_CBD.undo_marginal_price_scaling(s, result_mip)
-
-gen_consume_summary_nodal=_CBD.summarize_generator_solution_data(result_mip, data,s)#print SOLUTION
-
-social_welfare = _CBD.SocialWelfare(s, result_mip, mn_data, data)
-
-_CBD.plot_cumulative_production_all_scenarios_allWF(s, mn_data)
-
-_CBD.plot_cumulative_income_all_scenarios_allWF(s, mn_data)
-
-_CBD.plot_cumulative_income_tl_all_scenarios(s,data)
-
-_CBD.plot_cumulative_wf_production_all_scenarios(s, mn_data, "DE")
-
-_CBD.plot_cumulative_wf_income_all_scenarios(s, mn_data, "DK")
-
-#_CBD.plot_dual_marginal_price(result_mip, keys(mn_data["scenario"][scenario]), (2,"BE"))
-
-
-
-
-###########################################################################################################################
-############### YUSO 
-#Generation 
-#=df=FileIO.load(s["scenario_data_file"])
-scene="NT";year="2030";country="UK"
-CSV.write("C:\\Users\\shardy\\Documents\\julia\\times_series_input_large_files\\YUSO_data\\"*country*"_"*scene*year*"_ENERGY_MIX.csv", df["Generation"]["Scenarios"][scene][year][country])
-#Demand
-scene="Base";year="2020";country="UK"
-CSV.write("C:\\Users\\shardy\\Documents\\julia\\times_series_input_large_files\\YUSO_data\\"*country*"_BASE_DEMAND.csv", select(df["Demand"][scene][year],["time_stamp",country*"_MWh"]))
-=###############
-=#
