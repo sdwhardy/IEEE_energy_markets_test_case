@@ -1627,17 +1627,17 @@ function print_branchdc_ne(result_mip,argz,data_mip)
         println("%%%% Cables HVDC t0 %%%%")
         for (i,br) in sort(OrderedCollections.OrderedDict(result_mip["solution"]["nw"]["1"]["branchdc_ne"]), by=x->parse(Int64,x))
             if (br["isbuilt"]==1)
-                println(string(i)*": "*string(data_mip["branchdc_ne"][i]["fbusdc"])*" - "*string(data_mip["branchdc_ne"][i]["tbusdc"])*" MVA: "*string(data_mip["branchdc_ne"][i]["rateA"])*" cost: "*string(data_mip["branchdc_ne"][i]["cost"]))
+                println(string(i)*": "*string(data_mip["branchdc_ne"][i]["fbusdc"])*" - "*string(data_mip["branchdc_ne"][i]["tbusdc"])*" GVA: "*string(data_mip["branchdc_ne"][i]["rateA"]/10)*" cost: "*string(data_mip["branchdc_ne"][i]["cost"]))
         end;end
         println("%%%% Cables HVDC t2 %%%%")
         for (i,br) in sort(OrderedCollections.OrderedDict(result_mip["solution"]["nw"][string(argz["hours_length"]+1)]["branchdc_ne"]), by=x->parse(Int64,x))
             if (br["isbuilt"]==1)
-                println(string(i)*": "*string(data_mip["branchdc_ne"][i]["fbusdc"])*" - "*string(data_mip["branchdc_ne"][i]["tbusdc"])*" MVA: "*string(data_mip["branchdc_ne"][i]["rateA"])*" cost: "*string(data_mip["branchdc_ne"][i]["cost"]))
+                println(string(i)*": "*string(data_mip["branchdc_ne"][i]["fbusdc"])*" - "*string(data_mip["branchdc_ne"][i]["tbusdc"])*" GVA: "*string(data_mip["branchdc_ne"][i]["rateA"]/10)*" cost: "*string(data_mip["branchdc_ne"][i]["cost"]))
         end;end
         println("%%%% Cables HVDC tinf %%%%")
         for (i,br) in sort(OrderedCollections.OrderedDict(result_mip["solution"]["nw"][string(length(result_mip["solution"]["nw"]))]["branchdc_ne"]), by=x->parse(Int64,x))
             if (br["isbuilt"]==1)
-                println(string(i)*": "*string(data_mip["branchdc_ne"][i]["fbusdc"])*" - "*string(data_mip["branchdc_ne"][i]["tbusdc"])*" MVA: "*string(data_mip["branchdc_ne"][i]["rateA"])*" cost: "*string(data_mip["branchdc_ne"][i]["cost"]))
+                println(string(i)*": "*string(data_mip["branchdc_ne"][i]["fbusdc"])*" - "*string(data_mip["branchdc_ne"][i]["tbusdc"])*" GVA: "*string(data_mip["branchdc_ne"][i]["rateA"]/10)*" cost: "*string(data_mip["branchdc_ne"][i]["cost"]))
         end;end
     end
 end
@@ -1656,7 +1656,7 @@ function print_storage(result_mip,argz,data)
             if !(haskey(storage_cost["t0"],string(i)));push!(storage_cost["t0"],string(i)=>cst);end
             if !(haskey(storage_cost["t0"],"all"));push!(storage_cost["t0"],"all"=>cst);else;storage_cost["t0"]["all"]=storage_cost["t0"]["all"]+cst;end
             storage_cost["all"]=storage_cost["all"]+cst
-            println(string(i)*": "*" MWh: "*string(s["e_absmax"])*" Cost: "*string(cst))
+            println(string(i)*": "*" GWh: "*string(s["e_absmax"]/10)*" Cost: "*string(cst))
         end
         println("%%%% Storage t2 %%%%")
         for (i,s) in sort(OrderedCollections.OrderedDict(result_mip["solution"]["nw"][string(argz["hours_length"]+1)]["storage"]), by=x->parse(Int64,x))
@@ -1669,7 +1669,7 @@ function print_storage(result_mip,argz,data)
             if !(haskey(storage_cost["t2"],string(i)));push!(storage_cost["t2"],string(i)=>cst);end
             if !(haskey(storage_cost["t2"],"all"));push!(storage_cost["t2"],"all"=>cst);else;storage_cost["t2"]["all"]=storage_cost["t2"]["all"]+cst;end
             storage_cost["all"]=storage_cost["all"]+cst
-                println(string(i)*": "*" MWh: "*string(s["e_absmax"])*" Cost: "*string(cst))
+                println(string(i)*": "*" GWh: "*string(s["e_absmax"]/10)*" Cost: "*string(cst))
         end
         println("%%%% Storage tinf %%%%")
         for (i,s) in sort(OrderedCollections.OrderedDict(result_mip["solution"]["nw"][string(length(result_mip["solution"]["nw"]))]["storage"]), by=x->parse(Int64,x))
@@ -1682,7 +1682,7 @@ function print_storage(result_mip,argz,data)
             if !(haskey(storage_cost["tinf"],string(i)));push!(storage_cost["tinf"],string(i)=>cst);end
             if !(haskey(storage_cost["tinf"],"all"));push!(storage_cost["tinf"],"all"=>cst);else;storage_cost["tinf"]["all"]=storage_cost["tinf"]["all"]+cst;end
             storage_cost["all"]=storage_cost["all"]+cst
-            println(string(i)*": "*" MWh: "*string(s["e_absmax"])*" Cost: "*string(cst))
+            println(string(i)*": "*" GWh: "*string(s["e_absmax"]/10)*" Cost: "*string(cst))
         end
     end
     return storage_cost
@@ -1702,7 +1702,7 @@ function print_converters(result_mip,argz,data)
                 if !(haskey(converter_cost["t0"],string(i)));push!(converter_cost["t0"],string(i)=>cst);end
                 if !(haskey(converter_cost["t0"],"all"));push!(converter_cost["t0"],"all"=>cst);else;converter_cost["t0"]["all"]=converter_cost["t0"]["all"]+cst;end
                 converter_cost["all"]=converter_cost["all"]+cst
-                println(string(i)*": "*string(cv["p_pacmax"])*" Cost: "*string(cst))
+                println(string(i)*": "*string(cv["p_pacmax"]/10)*" Cost: "*string(cst))
         end;
         println("%%%% Converters t2 %%%%")
         for (i,cv) in sort(OrderedCollections.OrderedDict(result_mip["solution"]["nw"][string(argz["hours_length"]+1)]["convdc"]), by=x->parse(Int64,x))
@@ -1715,7 +1715,7 @@ function print_converters(result_mip,argz,data)
                 if !(haskey(converter_cost["t2"],string(i)));push!(converter_cost["t2"],string(i)=>cst);end
                 if !(haskey(converter_cost["t2"],"all"));push!(converter_cost["t2"],"all"=>cst);else;converter_cost["t2"]["all"]=converter_cost["t2"]["all"]+cst;end
                 converter_cost["all"]=converter_cost["all"]+cst
-                println(string(i)*": "*string(cv["p_pacmax"])*" Cost: "*string(cst))
+                println(string(i)*": "*string(cv["p_pacmax"]/10)*" Cost: "*string(cst))
         end;
         println("%%%% Converters tinf %%%%")
         for (i,cv) in sort(OrderedCollections.OrderedDict(result_mip["solution"]["nw"][string(length(result_mip["solution"]["nw"]))]["convdc"]), by=x->parse(Int64,x))
@@ -1728,7 +1728,7 @@ function print_converters(result_mip,argz,data)
                 if !(haskey(converter_cost["tinf"],string(i)));push!(converter_cost["tinf"],string(i)=>cst);end
                 if !(haskey(converter_cost["tinf"],"all"));push!(converter_cost["tinf"],"all"=>cst);else;converter_cost["tinf"]["all"]=converter_cost["tinf"]["all"]+cst;end
                 converter_cost["all"]=converter_cost["all"]+cst
-                println(string(i)*": "*string(cv["p_pacmax"])*" Cost: "*string(cst))
+                println(string(i)*": "*string(cv["p_pacmax"]/10)*" Cost: "*string(cst))
         end;
     end
     return converter_cost
@@ -1750,7 +1750,7 @@ function print_owpps(result_mip,argz,data)
                 if !(haskey(owpp_cost["t0"],string(i)));push!(owpp_cost["t0"],string(i)=>cst);end
                 if !(haskey(owpp_cost["t0"],"all"));push!(owpp_cost["t0"],"all"=>cst);else;owpp_cost["t0"]["all"]=owpp_cost["t0"]["all"]+cst;end
                 owpp_cost["all"]=owpp_cost["all"]+cst
-                println(string(i)*": "*string(wf["wf_pacmax"])*" Cost: "*string(cst))
+                println(string(i)*": "*string(wf["wf_pacmax"]/10)*" Cost: "*string(cst))
         end;end
         println("%%%% OWPPS T2 %%%%")
         for (i,wf) in sort(OrderedCollections.OrderedDict(result_mip["solution"]["nw"][string(argz["hours_length"]+1)]["gen"]), by=x->parse(Int64,x))
@@ -1765,7 +1765,7 @@ function print_owpps(result_mip,argz,data)
                 if !(haskey(owpp_cost["t2"],string(i)));push!(owpp_cost["t2"],string(i)=>cst);end
                 if !(haskey(owpp_cost["t2"],"all"));push!(owpp_cost["t2"],"all"=>cst);else;owpp_cost["t2"]["all"]=owpp_cost["t2"]["all"]+cst;end
                 owpp_cost["all"]=owpp_cost["all"]+cst
-                println(string(i)*": "*string(wf["wf_pacmax"])*" Cost: "*string(cst))
+                println(string(i)*": "*string(wf["wf_pacmax"]/10)*" Cost: "*string(cst))
         end;end
         println("%%%% OWPPS Tinf %%%%")
         for (i,wf) in sort(OrderedCollections.OrderedDict(result_mip["solution"]["nw"][string(length(result_mip["solution"]["nw"]))]["gen"]), by=x->parse(Int64,x))
@@ -1780,7 +1780,7 @@ function print_owpps(result_mip,argz,data)
                 if !(haskey(owpp_cost["tinf"],string(i)));push!(owpp_cost["tinf"],string(i)=>cst);end
                 if !(haskey(owpp_cost["tinf"],"all"));push!(owpp_cost["tinf"],"all"=>cst);else;owpp_cost["tinf"]["all"]=owpp_cost["tinf"]["all"]+cst;end
                 owpp_cost["all"]=owpp_cost["all"]+cst
-                println(string(i)*": "*string(wf["wf_pacmax"])*" Cost: "*string(cst))
+                println(string(i)*": "*string(wf["wf_pacmax"]/10)*" Cost: "*string(cst))
         end;end
     end
     return owpp_cost
@@ -1796,7 +1796,7 @@ function print_branch(result_mip,argz,data)
                 if !(haskey(branch_cost["t0"],string(i)));push!(branch_cost["t0"],string(i)=>cst);end
                 if !(haskey(branch_cost["t0"],"all"));push!(branch_cost["t0"],"all"=>cst);else;branch_cost["t0"]["all"]=branch_cost["t0"]["all"]+cst;end
                 branch_cost["all"]=branch_cost["all"]+cst
-            println(string(i)*": "*string(data["branch"][i]["f_bus"])*" - "*string(data["branch"][i]["t_bus"])*" MVA: "*string(br["p_rateAC"])*" Cost: "*string(cst))
+            println(string(i)*": "*string(data["branch"][i]["f_bus"])*" - "*string(data["branch"][i]["t_bus"])*" GVA: "*string(br["p_rateAC"]/10)*" Cost: "*string(cst))
             push!(argz["topology"]["t0"]["ac"],[data["branch"][i]["f_bus"],data["branch"][i]["t_bus"],br["p_rateAC"]])
         end;end
         println("%%%% Cables HVAC t2 %%%%")
@@ -1806,7 +1806,7 @@ function print_branch(result_mip,argz,data)
                 if !(haskey(branch_cost["t2"],string(i)));push!(branch_cost["t2"],string(i)=>cst);end
                 if !(haskey(branch_cost["t2"],"all"));push!(branch_cost["t2"],"all"=>cst);else;branch_cost["t2"]["all"]=branch_cost["t2"]["all"]+cst;end
                 branch_cost["all"]=branch_cost["all"]+cst
-            println(string(i)*": "*string(data["branch"][i]["f_bus"])*" - "*string(data["branch"][i]["t_bus"])*" MVA: "*string(br["p_rateAC"])*" Cost: "*string(cst))
+            println(string(i)*": "*string(data["branch"][i]["f_bus"])*" - "*string(data["branch"][i]["t_bus"])*" GVA: "*string(br["p_rateAC"]/10)*" Cost: "*string(cst))
             push!(argz["topology"]["t2"]["ac"],[data["branch"][i]["f_bus"],data["branch"][i]["t_bus"],br["p_rateAC"]])
         end;end
         println("%%%% Cables HVAC tinf %%%%")
@@ -1816,7 +1816,7 @@ function print_branch(result_mip,argz,data)
                 if !(haskey(branch_cost["tinf"],string(i)));push!(branch_cost["tinf"],string(i)=>cst);end
                 if !(haskey(branch_cost["tinf"],"all"));push!(branch_cost["tinf"],"all"=>cst);else;branch_cost["tinf"]["all"]=branch_cost["tinf"]["all"]+cst;end
                 branch_cost["all"]=branch_cost["all"]+cst
-            println(string(i)*": "*string(data["branch"][i]["f_bus"])*" - "*string(data["branch"][i]["t_bus"])*" MVA: "*string(br["p_rateAC"])*" Cost: "*string(cst))
+            println(string(i)*": "*string(data["branch"][i]["f_bus"])*" - "*string(data["branch"][i]["t_bus"])*" GVA: "*string(br["p_rateAC"]/10)*" Cost: "*string(cst))
             push!(argz["topology"]["tinf"]["ac"],[data["branch"][i]["f_bus"],data["branch"][i]["t_bus"],br["p_rateAC"]])
         end;end
     end
@@ -1835,7 +1835,7 @@ function print_branchdc(result_mip,argz,data)
                 if !(haskey(branch_cost["t0"],string(i)));push!(branch_cost["t0"],string(i)=>cst);end
                 if !(haskey(branch_cost["t0"],"all"));push!(branch_cost["t0"],"all"=>cst);else;branch_cost["t0"]["all"]=branch_cost["t0"]["all"]+cst;end
                 branch_cost["all"]=branch_cost["all"]+cst
-            println(string(i)*": "*string(data["branchdc"][i]["fbusdc"])*" - "*string(data["branchdc"][i]["tbusdc"])*" MVA: "*string(br["p_rateA"])*" Cost: "*string(cst))
+            println(string(i)*": "*string(data["branchdc"][i]["fbusdc"])*" - "*string(data["branchdc"][i]["tbusdc"])*" GVA: "*string(br["p_rateA"]/10)*" Cost: "*string(cst))
             push!(argz["topology"]["t0"]["dc"],[data["branchdc"][i]["fbusdc"],data["branchdc"][i]["tbusdc"],br["p_rateA"]])
         end;end
         println("%%%% Cables HVDC t2 %%%%")
@@ -1845,7 +1845,7 @@ function print_branchdc(result_mip,argz,data)
                 if !(haskey(branch_cost["t2"],string(i)));push!(branch_cost["t2"],string(i)=>cst);end
                 if !(haskey(branch_cost["t2"],"all"));push!(branch_cost["t2"],"all"=>cst);else;branch_cost["t2"]["all"]=branch_cost["t2"]["all"]+cst;end
                 branch_cost["all"]=branch_cost["all"]+cst
-            println(string(i)*": "*string(data["branchdc"][i]["fbusdc"])*" - "*string(data["branchdc"][i]["tbusdc"])*" MVA: "*string(br["p_rateA"])*" Cost: "*string(cst))
+            println(string(i)*": "*string(data["branchdc"][i]["fbusdc"])*" - "*string(data["branchdc"][i]["tbusdc"])*" GVA: "*string(br["p_rateA"]/10)*" Cost: "*string(cst))
             push!(argz["topology"]["t2"]["dc"],[data["branchdc"][i]["fbusdc"],data["branchdc"][i]["tbusdc"],br["p_rateA"]])
         end;end
         println("%%%% Cables HVDC tinf %%%%")
@@ -1855,7 +1855,7 @@ function print_branchdc(result_mip,argz,data)
                 if !(haskey(branch_cost["tinf"],string(i)));push!(branch_cost["tinf"],string(i)=>cst);end
                 if !(haskey(branch_cost["tinf"],"all"));push!(branch_cost["tinf"],"all"=>cst);else;branch_cost["tinf"]["all"]=branch_cost["tinf"]["all"]+cst;end
                 branch_cost["all"]=branch_cost["all"]+cst
-            println(string(i)*": "*string(data["branchdc"][i]["fbusdc"])*" - "*string(data["branchdc"][i]["tbusdc"])*" MVA: "*string(br["p_rateA"])*" Cost: "*string(cst))
+            println(string(i)*": "*string(data["branchdc"][i]["fbusdc"])*" - "*string(data["branchdc"][i]["tbusdc"])*" GVA: "*string(br["p_rateA"]/10)*" Cost: "*string(cst))
             push!(argz["topology"]["tinf"]["dc"],[data["branchdc"][i]["fbusdc"],data["branchdc"][i]["tbusdc"],br["p_rateA"]])
         end;end
     end
