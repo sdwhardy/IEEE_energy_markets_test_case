@@ -40,7 +40,7 @@ s = Dict(
 ######################### Nodal OBZ #########################
 s["home_market"]=[]
 mn_data, data, s = _CBD.data_setup(s);
-#_CBD.problemINPUT_map(data, s)#oucomment to print result
+_CBD.problemINPUT_map(data, s)#oucomment to print result
 @time result = _CBD.nodal_market_main(mn_data, data, s)#0.04% gap remained for best solution found
 result["s"]["cost_summary"]=_CBD.print_solution_wcost_data(result["result_mip"], result["s"], result["data"])
 

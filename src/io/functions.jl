@@ -154,6 +154,30 @@ function get_topology_data(s)
     return data, s
 end
 
+#=country="FR"
+ts=scenario_data["Generation"]["RES"]["Offshore Wind"][country]["2015"][!,country*"_MWh"]
+sum(ts)/length(ts)
+BE
+2014:0.4053456029319635
+2015:0.4580923631639269
+UK
+2014:0.4130090032551277
+2015:0.37776645245081936
+NL
+2014:0.45002760967431504
+2015:0.4480488467697488
+DE
+2014:0.45225340715311957
+2015:0.45383560031231224
+DK
+2014:0.45634484441152967
+2015:0.47359769002990865
+NO
+2014:0.44982428092977383
+2015:0.4399956644005189
+FR
+2014:0.37906190301267856
+2015:0.40786826342739074=#
 function get_scenario_data(s)
     ############### defines size and market of genz and wfs ###################
 	scenario_data=FileIO.load(s["scenario_data_file"])
