@@ -45,7 +45,7 @@ FR
 2015:0.40786826342739074=#
 
 #load Time series data
-function load_time_series_gentypes(s, scenario_data)
+function load_time_series_gentypes_IEEE(s, scenario_data)
 	#keeps data from specified scenarios only
     scenario_data["Generation"]["Scenarios"]=reduce_to_scenario_list(scenario_data["Generation"]["Scenarios"],s);
     scenario_data["Demand"]=reduce_to_scenario_list(scenario_data["Demand"],s);
@@ -55,8 +55,8 @@ function load_time_series_gentypes(s, scenario_data)
     #keep only specified weather years
     scenario_data=reduce_to_weather_year_list(scenario_data,s);
     #keep only k specified days
-    scenario_data["Generation"]["RES"], tss2keep=reduce_RES_to_k_days(scenario_data["Generation"]["RES"],s);
-    scenario_data["Demand"]=reduce_DEMAND_to_k_days(scenario_data["Demand"],countries,tss2keep);
+    scenario_data["Generation"]["RES"], tss2keep=reduce_RES_to_k_days_IEEE(scenario_data["Generation"]["RES"],s);
+    scenario_data["Demand"]=reduce_DEMAND_to_k_days_IEEE(scenario_data["Demand"],countries,tss2keep);
     #record number of hours
     country=first(keys(scenario_data["Generation"]["RES"]["Offshore Wind"]))
     year=first(keys(scenario_data["Generation"]["RES"]["Offshore Wind"][country]))
@@ -85,7 +85,7 @@ _dict_in["Base"]["2021"]
 #─────┼──────────────────────────────
 #   1 │ 2020-01-01T00:00:00  0.025
 #   2 │ 2020-01-01T01:00:00  0.14855
-function reduce_DEMAND_to_k_days(_dict,_countries,_tss2keep);
+function reduce_DEMAND_to_k_days_IEEE(_dict,_countries,_tss2keep);
     clmns2keep=[count*"_MWh" for count in _countries];
     push!(clmns2keep,"time_stamp")
     for scenario in keys(_dict);
@@ -99,6 +99,8 @@ function reduce_DEMAND_to_k_days(_dict,_countries,_tss2keep);
     end
     return _dict
 end
+
+
 ############################################################################################
 #=keep only k specified RES days
 #TEST INPUT 
@@ -122,7 +124,7 @@ _dict_in=Dict(
 #─────┼──────────────────────────────
 #   1 │ 2020-01-01T00:00:00  0.025
 #   2 │ 2020-01-01T01:00:00  0.14855
-function reduce_RES_to_k_days(_dict,_s)
+function reduce_RES_to_k_days_IEEE(_dict,_s)
     #keep only k specified days, shift year to 2020 (base year for all simmulations)
     ks=FileIO.load(_s["rt_ex"]*"../../input//yearly_cluster_4UKBEDEDK_IEEE.jld2")#"C:\\Users\\shardy\\Documents\\julia\\times_series_input_large_files\\yearly_cluster_4UKBEDEDK.jld2")
     tss2keep=[]
@@ -267,10 +269,10 @@ function multi_period_setup(ls,scenario_data,data, markets, infinite_grid, argz,
     return mn_data, extradata
 end
 
-function multi_period_setup_wgen_type(scenario_data,data, all_gens, s)
+function multi_period_setup_wgen_type_IEEE(scenario_data,data, all_gens, s)
     #################### Multi-period input parameters #######################
     data, s = multi_period_stoch_year_setup_wgen_type(s,data);
-    extradata, data = create_profile_sets_mesh_wgen_type(data, all_gens, scenario_data, s)
+    extradata, data = create_profile_sets_mesh_wgen_type_IEEE(data, all_gens, scenario_data, s)
     extradata = create_profile_sets_rest_wgen_type(extradata, data, s)
     #########################################################################
     #################### Scale cost data
@@ -373,7 +375,7 @@ function multi_period_stoch_year_setup_wgen_type(ls,res_years,scenario_years,sce
     return data,scenario, dim
 end
 
-function create_profile_sets_mesh_wgen_type(data_orig, all_gens, scenario_data, s)
+function create_profile_sets_mesh_wgen_type_IEEE(data_orig, all_gens, scenario_data, s)
 	genz=[];wfz=[]
     pu=data_orig["baseMVA"]
     e2me=1000000/pu#into ME/PU

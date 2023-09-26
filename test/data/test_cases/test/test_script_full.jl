@@ -41,13 +41,13 @@ function main_test()
     ################## Run MIP Formulation ###################
     #NOTE only very basic intuitive check passed on functions wgen_type
     s["home_market"]=[]
-    mn_data, data, s = _CBD.data_setup(s);
-    result = _CBD.nodal_market_main(mn_data, data, s)
+    mn_data, data, s = _CBD.data_setup_IEEE(s);
+    result = _CBD.nodal_market_main_IEEE(mn_data, data, s)
     s["cost_summary"]=_CBD.print_solution_wcost_data(result["result_mip"], result["s"], result["data"])
     
     s_z["home_market"]=[[4,10],[5,11],[6,12],[1,8,13],[3,9]]
-    mn_data_z, data_z, s_z = _CBD.data_setup(s_z);#Build data structure for given options
-    result_z=_CBD.zonal_market_main(mn_data_z, data_z, s_z)
+    mn_data_z, data_z, s_z = _CBD.data_setup_IEEE(s_z);#Build data structure for given options
+    result_z=_CBD.zonal_market_main_IEEE(mn_data_z, data_z, s_z)
     s_z["cost_summary"]=_CBD.print_solution_wcost_data(result_z["result_mip"], result_z["s"], result_z["data"])
     return result["result_mip"]["objective"]+result_z["result_mip"]["objective"]
 end

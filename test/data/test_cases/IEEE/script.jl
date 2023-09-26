@@ -9,7 +9,7 @@ s = Dict(
 "rt_ex"=>pwd()*"\\test\\data\\test_cases\\IEEE\\",#folder path
 "scenario_data_file"=>pwd()*"\\test\\data\\input\\scenario_data_for_UKFRBENLDEDKNO.jld2",#"C:\\Users\\shardy\\Documents\\julia\\times_series_input_large_files\\scenario_data_for_UKFRBENLDEDKNO.jld2",
 ################# temperal parameters #################
-"test"=>false,#if true smallest (2 hour) problem variation is built for testing
+"test"=>true,#if true smallest (2 hour) problem variation is built for testing
 "scenario_planning_horizon"=>30,
 "scenario_names"=>["NT","DE","GA"],#["NT","DE","GA"]
 "k"=>4,#number of representative days modelled (24 hours per day)//#best for maintaining mean/max is k=6 2014, 2015
@@ -39,20 +39,20 @@ s = Dict(
 
 ######################### Nodal OBZ #########################
 s["home_market"]=[]
-mn_data, data, s = _CBD.data_setup(s);
+mn_data, data, s = _CBD.data_setup_IEEE(s);
 _CBD.problemINPUT_map(data, s)#oucomment to print result
-@time result = _CBD.nodal_market_main(mn_data, data, s)#0.04% gap remained for best solution found
+@time result = _CBD.nodal_market_main_IEEE(mn_data, data, s)#0.04% gap remained for best solution found
 result["s"]["cost_summary"]=_CBD.print_solution_wcost_data(result["result_mip"], result["s"], result["data"])
 
 ######################### HMD market #########################
 s["home_market"]=[[4,11],[5,10],[6,12],[1,8,13],[3,9]]
-mn_data, data, s = _CBD.data_setup(s);
-@time result = _CBD.zonal_market_main(mn_data, data, s)
+mn_data, data, s = _CBD.data_setup_IEEE(s);
+@time result = _CBD.zonal_market_main_IEEE(mn_data, data, s)
 result["s"]["cost_summary"]=_CBD.print_solution_wcost_data(result["result_mip"], result["s"], result["data"])
 
 ######################### Zonal OBZ #########################
 s["home_market"]=[[9,10,11,12,13]]
-mn_data, data, s = _CBD.data_setup(s);
-@time result = _CBD.zonal_market_main(mn_data, data, s)
+mn_data, data, s = _CBD.data_setup_IEEE(s);
+@time result = _CBD.zonal_market_main_IEEE(mn_data, data, s)
 result["s"]["cost_summary"]=_CBD.print_solution_wcost_data(result["result_mip"], result["s"], result["data"])
 
