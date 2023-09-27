@@ -46,19 +46,19 @@ DataFrames.rename!(dk_gen_load["FD"],Symbol.(new_names))
 DataFrames.rename!(dk_price["Orig"],Symbol.(new_names))
 
 #BE WF
-CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\generation_BE_EI2016_2040_test.csv", dk_gen_load["FD"][!,1:1])
-CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\cost_BE_EI2016_2040_test.csv", dk_price["Orig"][!,1:1])
+CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\generation_BE_EI2016_2040.csv", dk_gen_load["FD"][!,1:1])
+CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\cost_BE_EI2016_2040.csv", dk_price["Orig"][!,1:1])
 
 #BE
-CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\generation_BE2016_2040_test.csv", dk_gen_load["FD"][!,2:11])
-CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\cost_BE2016_2040_test.csv", dk_price["Orig"][!,2:11])
+CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\generation_BE2016_2040.csv", dk_gen_load["FD"][!,2:11])
+CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\cost_BE2016_2040.csv", dk_price["Orig"][!,2:11])
 
 #UK
-CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\generation_UK2016_2040_test.csv", dk_gen_load["FD"][!,12:end-2])
-CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\cost_UK2016_2040_test.csv", dk_price["Orig"][!,12:end-2])
+CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\generation_UK2016_2040.csv", dk_gen_load["FD"][!,12:end-2])
+CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\cost_UK2016_2040.csv", dk_price["Orig"][!,12:end-2])
 
 #Load
-CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\Load_BEUK2016_2040_test.csv", dk_gen_load["FD"][!,end-1:end])
+CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\Load_BEUK2016_2040.csv", dk_gen_load["FD"][!,end-1:end])
 ###################################################
 
 #results["1"]["result_mip"]["solution"]["nw"]["1"]["branchdc"]["1"]["pf"]
@@ -80,4 +80,4 @@ dc_cable_UKBE=dc_cable_UKBE./10
 
 loads=DataFrame(Symbol("dc cable BE")=>dc_cable_BEIE,Symbol("ac cable BE")=>ac_cable_BEIE,Symbol("dc cable UK")=>dc_cable_UKIE, Symbol("dc cable UKBE")=>dc_cable_UKBE)
 
-CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\powerflow_BEUK2016_2040_test.csv", loads)
+CSV.write(pwd()*"\\test\\data\\test_cases\\Yuso\\2016\\results\\powerflow_BEUK2016_2040.csv", loads)

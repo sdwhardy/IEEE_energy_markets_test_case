@@ -1,6 +1,6 @@
 ################## loads external packages ##############################
 using Gurobi, JuMP, DataFrames, FileIO, CSV, Dates, PlotlyJS
-import Cordoba_self; const _CBD = Cordoba_self#Cordoba package backend - under development
+import IEEE_energy_markets_test_case; const _CBD = IEEE_energy_markets_test_case#Cordoba package backend - under development
 import PowerModelsACDC; const _PMACDC = PowerModelsACDC
 import PowerModels; const _PM = PowerModels
 using OrderedCollections
@@ -137,7 +137,7 @@ function remove_integers(result_mip,mn_data,data,s, tops)
     end
     return s, mn_data
 end
-
+#=
 function set_rebalancing_grid(result_mip,mn_data,s, tops)
     for (i_sc, scn) in (s["scenario"]["sc_names"])
         for (i_yr, tss) in scn
@@ -199,4 +199,4 @@ function set_rebalancing_grid(result_mip,mn_data,s, tops)
     end
     return mn_data, s
 end
-    
+    =#

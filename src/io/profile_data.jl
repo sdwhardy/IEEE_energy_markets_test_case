@@ -271,7 +271,7 @@ end
 
 function multi_period_setup_wgen_type_IEEE(scenario_data,data, all_gens, s)
     #################### Multi-period input parameters #######################
-    data, s = multi_period_stoch_year_setup_wgen_type(s,data);
+    data, s = multi_period_stoch_year_setup_wgen_type_IEEE(s,data);
     extradata, data = create_profile_sets_mesh_wgen_type_IEEE(data, all_gens, scenario_data, s)
     extradata = create_profile_sets_rest_wgen_type(extradata, data, s)
     #########################################################################
@@ -326,7 +326,39 @@ function multi_period_stoch_year_setup_wgen_type(s,data)
     data["scenario"] = Dict{String, Any}()
     data["scenario_prob"] = Dict{String, Any}()
     #set problem dimension
+    #dim = scenario["hours"] * length(s["scenario_years"]) * length(s["res_years"]) * length(s["scenario_names"])
+    dim = Int64(scenario["hours"] * length(s["scenario_years"])*ceil(length(s["scenario_names"])/length(s["scenario_years"]))*length(s["res_years"]))
+    for _nm in scenario_names; for _by in s["res_years"]; push!(scenario["sc_names"], string(_nm)*string(_by)=> Dict{String, Any}());for _yr in s["scenario_years"]; push!(scenario["sc_names"][string(_nm)*string(_by)], _yr=> []);end;end;end
+
+    for (s,(k_sc,_sc)) in enumerate(scenario["sc_names"]);
+		data["scenario"][string(s)] = Dict()
+        data["scenario_prob"][string(s)] = 1/length(scenario["sc_names"])
+        for (t,(k_yr,_yr)) in enumerate(sort(OrderedCollections.OrderedDict(_sc), by=x->parse(Int64,x)));
+            start_idx=(s-1)*scenario["hours"]*length(_sc)
+            start_idx=start_idx+(t-1)*scenario["hours"]
+            for h in 1 : scenario["hours"]
+                network = start_idx + h
+                h2=h+(t-1)*scenario["hours"]
+                data["scenario"][string(s)]["$h2"] = network
+                push!(scenario["sc_names"][string(k_sc)][k_yr],network)
+            end
+        end;
+    end
+    s["scenario"]=scenario
+    s["scenario"]["planning_horizon"] = s["scenario_planning_horizon"]; # in years, to scale generation cost
+    s["dim"]=dim
+    return data,s
+end
+
+#Organizes nw numbers per scenario-year
+function multi_period_stoch_year_setup_wgen_type_IEEE(s,data)
+	scenario_names=unique([sn[1:2] for sn in s["scenario_names"]])
+    scenario = Dict{String, Any}("hours" => s["hours_length"],"years" => length(s["scenario_years"]), "sc_names" => Dict{String, Any}())
+    data["scenario"] = Dict{String, Any}()
+    data["scenario_prob"] = Dict{String, Any}()
+    #set problem dimension
     dim = scenario["hours"] * length(s["scenario_years"]) * length(s["res_years"]) * length(s["scenario_names"])
+    
     for _nm in scenario_names; for _by in s["res_years"]; push!(scenario["sc_names"], string(_nm)*string(_by)=> Dict{String, Any}());for _yr in s["scenario_years"]; push!(scenario["sc_names"][string(_nm)*string(_by)], _yr=> []);end;end;end
 
     for (s,(k_sc,_sc)) in enumerate(scenario["sc_names"]);
